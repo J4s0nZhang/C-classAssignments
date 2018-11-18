@@ -1,0 +1,50 @@
+
+
+#include <iostream>
+
+using namespace std;
+
+void displayBits(const unsigned char bits){
+    int i = 8; 
+    while( i > 0 ){
+        --i;
+        cout << ((bits >> i ) & 0x01);
+        if(i % 4 == 0){
+            cout << " ";
+        }
+    }
+    cout << endl;
+    return;
+}
+
+void switchOn( const unsigned int lightNumber,unsigned char& lights){
+    lights = lights | (0x01 << lightNumber);
+    return;
+}
+
+void switchOff( const unsigned int lightNumber,unsigned char& lights){
+    lights = lights & ~(0x01 << lightNumber);
+    return;
+}
+
+void flipLight(const unsigned int lightNumber,unsigned char& lights){
+    lights = lights ^ (0x01 << lightNumber);
+    return;
+}
+int main()
+{
+    unsigned char lights = 0;
+    cout << "Lights: ";
+    displayBits(lights);
+    
+    switchOn(7,lights);
+    switchOn(1, lights);
+    switchOff(7,lights);
+    
+    displayBits(lights);
+    
+   
+    
+
+    return 0;
+}
