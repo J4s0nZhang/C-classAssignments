@@ -3,14 +3,15 @@
 
 // Methods
 void SafeMatrix::transpose() {
-  int col = _numRows;
-  int row = _numCols;
+  int temp = _numRows;
+  _numRows = _numCols;
+  _numCols = temp; 
 
-  float* data = new (std::nothrow) float[row * col];
+  float* data = new (std::nothrow) float[_numCols * _numRows];
 
-  for(int i = 0; i < _numRows; i++){
-    for(int j = 0; j < _numCols; j++){
-      data[i] = MATRIX(*this, j,i );
+  for(int i = 0; i < _numCols; i++){
+    for(int j = 0; j < _numRows; j++){
+      data[i+j] = MATRIX(*this, j,i );
     }
   }
 
@@ -23,7 +24,7 @@ void SafeMatrix::transpose() {
 bool SafeMatrix::appendRow(const int cols, const float data[]) {
 
   if(_numCols != cols){
-    return 0; 
+    return _nan; 
   }
   _numRows += 1;
   _dataSpaceAllocated = _numRows * _numCols;
@@ -80,7 +81,7 @@ Dimensions SafeMatrix::dimensions() const {
 
 // Operators
 float& SafeMatrix::operator()(int i, int j) {
-    return MATRIX(*this, i, j); 
+  return MATRIX(*this, i, j); 
 }  
 
 SafeMatrix SafeMatrix::operator+(const SafeMatrix& m) const {
@@ -139,9 +140,10 @@ SafeMatrix::SafeMatrix(const SafeMatrix& m) {
   _numRows = m._numRows;
   _numCols = m._numCols;
   _dataSpaceAllocated = m._dataSpaceAllocated;
-  _data = new (std::nothrow) float[_dataSpaceAllocated];
-  for (int i = 0; i < _dataSpaceAllocated; i++){
-    _data[i] = m._data[i];
+  if(_data = new (std::nothrow) float[_dataSpaceAllocated]){
+    for (int i = 0; i < _dataSpaceAllocated; i++){
+      _data[i] = m._data[i];
+    }
   }
 
 }
@@ -149,20 +151,21 @@ SafeMatrix::SafeMatrix(const int rows, const int cols) {
   _numRows = rows;
   _numCols = cols;
   _dataSpaceAllocated = _numRows*_numCols;
-  _data = new (std::nothrow) float[_dataSpaceAllocated];
-  for (int i = 0; i < _dataSpaceAllocated; i++){
-    _data[i] = -1;
+  if(_data = new (std::nothrow) float[_dataSpaceAllocated]){
+    for (int i = 0; i < _dataSpaceAllocated; i++){
+      _data[i] = -1;
+    }
   }
-    
 }
 SafeMatrix::SafeMatrix(const int rows, const int cols, const float initVal) {
-    _numRows = rows;
-    _numCols = cols;
-    _dataSpaceAllocated = _numRows * _numCols;
-    _data = new (std::nothrow) float[_dataSpaceAllocated] ;
+  _numRows = rows;
+  _numCols = cols;
+  _dataSpaceAllocated = _numRows * _numCols;
+  if(_data = new (std::nothrow) float[_dataSpaceAllocated]){
     for (int i = 0; i < _dataSpaceAllocated; i++){
       _data[i] = initVal;
     }
+  }
 
 
 }
