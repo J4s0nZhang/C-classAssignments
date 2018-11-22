@@ -17,9 +17,15 @@ float evaluate(const Polynomial p, const float x) {
     cerr << "Note: degree was less than zero" << endl;
     return NAN;
   }
+<<<<<<< HEAD
   float value = 0;
   for(int i = 0; i < p.degree+1; i++){
     value += p.coeff[i]*pow(x,(p.degree-i));
+=======
+  float value = p.coeff[0];
+  for(int i = 1; i < p.degree+1; i++){
+    value = p.coeff[i] + x*value;
+>>>>>>> 3d717c739a5e353ad3c98461888d929a55f9929f
   }
 
   return value;
